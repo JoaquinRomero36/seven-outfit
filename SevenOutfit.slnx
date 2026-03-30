@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SevenOutfit.API/SevenOutfit.API.csproj" />
+    <Project Path="src/SevenOutfit.Core/SevenOutfit.Core.csproj" />
+    <Project Path="src/SevenOutfit.Infrastructure/SevenOutfit.Infrastructure.csproj" />
+  </Folder>
+</Solution>

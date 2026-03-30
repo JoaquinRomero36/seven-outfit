@@ -1,0 +1,6 @@
+@SevenOutfit.API_HostAddress = http://localhost:5248
+
+GET {{SevenOutfit.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

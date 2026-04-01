@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SevenOutfit.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bc0cf3282eddb77fa6fad6c3bb5660a5d872ed82")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1edc59dad647ebe9d3bd26b2a75738a09cbf9114")]
 [assembly: System.Reflection.AssemblyProductAttribute("SevenOutfit.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SevenOutfit.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

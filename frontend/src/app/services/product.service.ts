@@ -3,12 +3,13 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Product, CreateProduct, ProductCategory, ProductSize } from '../models/product.model';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:5000/api/products';
+  private apiUrl = `${environment.apiUrl}/products`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -54,7 +55,7 @@ export class ProductService {
   }
 
   generateWhatsAppLink(product: Product, size?: string): string {
-    const phone = '5491112345678'; // Replace with actual WhatsApp number
+    const phone = environment.whatsappNumber;
     const message = encodeURIComponent(
       `Hola, quiero comprar ${product.name} en talle ${size || 'M'} por $${product.price.toLocaleString()}`
     );

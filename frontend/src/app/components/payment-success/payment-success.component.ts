@@ -1,0 +1,110 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+
+@Component({
+  selector: 'app-payment-success',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
+  template: `
+    <div class="result-container">
+      <div class="result-card success">
+        <div class="result-icon">
+          <svg viewBox="0 0 24 24" width="80" height="80">
+            <circle cx="12" cy="12" r="10" fill="#10B981"/>
+            <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h1>¡Pago exitoso!</h1>
+        <p>Tu compra fue procesada correctamente.</p>
+        <p class="subtitle">Te contactaremos pronto para coordinar el envío.</p>
+        <div class="actions">
+          <a routerLink="/catalogo" class="btn-primary">Seguir comprando</a>
+          <a routerLink="/" class="btn-secondary">Volver al inicio</a>
+        </div>
+      </div>
+    </div>
+  `,
+  styles: [`
+    .result-container {
+      min-height: calc(100vh - 200px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    
+    .result-card {
+      background: white;
+      border-radius: 24px;
+      padding: 3rem;
+      text-align: center;
+      max-width: 500px;
+      box-shadow: var(--shadow-xl);
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    .result-icon {
+      margin-bottom: 1.5rem;
+    }
+    
+    h1 {
+      color: #10B981;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    p {
+      color: var(--text);
+      font-size: 1.1rem;
+    }
+    
+    .subtitle {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      justify-content: center;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(60, 67, 93, 0.3);
+    }
+    
+    .btn-secondary {
+      background: var(--accent);
+      color: var(--primary);
+      padding: 0.8rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+      background: var(--accent-dark);
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  `]
+})
+export class PaymentSuccessComponent {}

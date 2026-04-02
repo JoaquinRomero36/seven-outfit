@@ -192,8 +192,10 @@ export class ProductDetailComponent implements OnInit {
     this.http.post<any>(`${environment.apiUrl}/payments/create-preference`, body)
       .subscribe({
         next: (response) => {
-          // Usar initPoint (producción) con tarjetas de prueba
-          window.location.href = response.initPoint;
+          // sandbox_init_point = entorno test, initPoint = producción
+          const isTest = true; // Cambiar a false para producción
+          const checkoutUrl = isTest ? response.sandboxInitPoint : response.initPoint;
+          window.location.href = checkoutUrl;
         },
         error: (error) => {
           console.error('Error creating preference:', error);

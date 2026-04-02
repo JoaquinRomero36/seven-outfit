@@ -31,7 +31,6 @@ public class MercadoPagoService : IMercadoPagoService
 
     public async Task<PaymentPreferenceResponseDto> CreatePreferenceAsync(CreatePaymentPreferenceDto dto)
     {
-        // Obtener producto de la base de datos
         var product = await _productService.GetProductByIdAsync(dto.ProductId);
         if (product == null)
             throw new Exception("Producto no encontrado");
@@ -40,34 +39,44 @@ public class MercadoPagoService : IMercadoPagoService
             throw new Exception("Producto sin stock");
 
         var accessToken = _configuration["MercadoPago:AccessToken"];
-        _logger.LogInformation("Creando preferencia MP para producto: {ProductName}, Precio: {Price}", product.Name, product.Price);
+        var price = Math.Round((double)product.Price, 2);
         
-        // Crear el body de la preferencia
+        _logger.LogInformation("Creando preferencia MP: {ProductName}, Precio: {Price}", product.Name, price);
+        
+        // URL de ngrok para desarrollo (cambiar en producción)
+        var baseUrl = "https://916b-2803-9800-b880-81d9-5805-70a5-ef4a-6973.ngrok-free.app";
+        
         var preference = new
         {
             items = new[]
             {
                 new
                 {
+                    id = $"product_{product.Id}",
                     title = product.Name,
                     description = $"Talle: {dto.Size ?? product.Size.ToString()} - Seven Outfit",
                     quantity = dto.Quantity,
-                    unit_price = (double)product.Price,
+                    unit_price = price,
                     currency_id = "ARS"
                 }
             },
             back_urls = new
             {
-                success = "http://localhost:4200/pago/exito",
-                failure = "http://localhost:4200/pago/fallo",
-                pending = "http://localhost:4200/pago/pendiente"
+                success = $"{baseUrl}/pago/exito",
+                failure = $"{baseUrl}/pago/fallo",
+                pending = $"{baseUrl}/pago/pendiente"
             },
             auto_return = "approved",
             external_reference = $"order_{product.Id}_{DateTime.UtcNow:yyyyMMddHHmmss}",
             statement_descriptor = "SEVEN OUTFIT"
         };
 
-        var json = JsonSerializer.Serialize(preference);
+        var json = JsonSerializer.Serialize(preference, new JsonSerializerOptions 
+        { 
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        });
+        
         _logger.LogInformation("Request body: {Body}", json);
         
         var content = new StringContent(json, Encoding.UTF8, "application/json");

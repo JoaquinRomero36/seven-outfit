@@ -6,8 +6,6 @@ import { Product, CategoryLabels, SizeLabels } from '../../models/product.model'
 import { ProductService } from '../../services/product.service';
 import { environment } from '../../../environments/environment';
 
-declare var MercadoPago: any;
-
 @Component({
   selector: 'app-product-detail',
   standalone: true,
@@ -57,14 +55,14 @@ declare var MercadoPago: any;
             <div class="buy-section">
               <h3 class="buy-title">Elegí cómo pagar:</h3>
               
-              <!-- Botón Mercado Pago -->
+              <!-- Botón Mercado Pago Checkout Pro -->
               <button 
                 (click)="payWithMercadoPago()" 
                 class="btn-mercadopago" 
                 [disabled]="product.stock === 0 || loadingPayment">
                 @if (loadingPayment) {
                   <span class="spinner-small"></span>
-                  <span>Procesando...</span>
+                  <span>Cargando...</span>
                 } @else {
                   <svg class="mp-logo" viewBox="0 0 24 24" width="24" height="24">
                     <path fill="#009EE3" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
@@ -86,7 +84,7 @@ declare var MercadoPago: any;
               </a>
               
               <p class="buy-note">
-                Mercado Pago: Pago seguro con tarjeta, débito o transferencia.<br>
+                Mercado Pago: Pago seguro con tarjeta o débito.<br>
                 WhatsApp: Te contactamos para coordinar el pago.
               </p>
             </div>
@@ -101,252 +99,39 @@ declare var MercadoPago: any;
     </div>
   `,
   styles: [`
-    .detail-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-    
-    .breadcrumb {
-      margin-bottom: 2rem;
-    }
-    
-    .breadcrumb a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-    
-    .breadcrumb a:hover {
-      color: var(--primary-light);
-    }
-    
-    .product-detail {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-    }
-    
-    .product-image {
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: var(--shadow-xl);
-    }
-    
-    .product-image img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    
-    .product-info {
-      padding: 1rem 0;
-    }
-    
-    .category {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--primary);
-      padding: 0.4rem 1.2rem;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-    
-    h1 {
-      font-size: 2.2rem;
-      color: var(--primary);
-      margin-bottom: 0.5rem;
-      font-weight: 800;
-    }
-    
-    .price {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: var(--primary);
-      margin-bottom: 2rem;
-    }
-    
-    .detail-row {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--accent);
-    }
-    
-    .label {
-      color: var(--text-light);
-      font-weight: 500;
-    }
-    
-    .value {
-      color: var(--text);
-      font-weight: 600;
-    }
-    
-    .size-badge {
-      background: var(--primary);
-      color: white;
-      padding: 0.3rem 1rem;
-      border-radius: 8px;
-      font-weight: 600;
-    }
-    
-    .low-stock {
-      color: var(--warning);
-    }
-    
-    .buy-section {
-      margin-top: 2rem;
-      padding: 2rem;
-      background: var(--accent);
-      border-radius: 20px;
-    }
-    
-    .buy-title {
-      font-size: 1.1rem;
-      color: var(--primary);
-      margin-bottom: 1.5rem;
-      font-weight: 700;
-    }
-    
-    .btn-mercadopago {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.8rem;
-      background: linear-gradient(135deg, #009EE3 0%, #007BB8 100%);
-      color: white;
-      padding: 1rem 2rem;
-      border-radius: 12px;
-      border: none;
-      font-size: 1.05rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 158, 227, 0.3);
-    }
-    
-    .btn-mercadopago:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 158, 227, 0.4);
-    }
-    
-    .btn-mercadopago:disabled {
-      background: var(--accent-dark);
-      box-shadow: none;
-      cursor: not-allowed;
-    }
-    
-    .mp-logo {
-      width: 24px;
-      height: 24px;
-    }
-    
-    .divider {
-      display: flex;
-      align-items: center;
-      margin: 1.5rem 0;
-      color: var(--text-light);
-      font-size: 0.9rem;
-    }
-    
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--accent-dark);
-    }
-    
-    .divider span {
-      padding: 0 1rem;
-    }
-    
-    .btn-whatsapp {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.8rem;
-      background: #25D366;
-      color: white;
-      padding: 1rem 2rem;
-      border-radius: 12px;
-      text-decoration: none;
-      font-size: 1.05rem;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-    }
-    
-    .btn-whatsapp:hover:not(.disabled) {
-      transform: translateY(-2px);
-      background: #128C7E;
-      box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
-    }
-    
-    .btn-whatsapp.disabled {
-      background: var(--accent-dark);
-      box-shadow: none;
-      cursor: not-allowed;
-    }
-    
-    .buy-note {
-      margin-top: 1.5rem;
-      font-size: 0.85rem;
-      color: var(--text-light);
-      text-align: center;
-      line-height: 1.6;
-    }
-    
-    .spinner-small {
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-top: 2px solid white;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    
-    .loading, .not-found {
-      text-align: center;
-      padding: 4rem;
-    }
-    
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 4px solid var(--accent);
-      border-top: 4px solid var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 1rem;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    @media (max-width: 768px) {
-      .product-detail {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-      
-      h1 {
-        font-size: 1.8rem;
-      }
-      
-      .price {
-        font-size: 2rem;
-      }
-    }
+    .detail-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .breadcrumb { margin-bottom: 2rem; }
+    .breadcrumb a { color: #3c435d; text-decoration: none; font-weight: 500; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .product-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .product-image { border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    .product-image img { width: 100%; height: auto; display: block; }
+    .product-info { padding: 1rem 0; }
+    .category { display: inline-block; background: #eaeaec; color: #3c435d; padding: 0.4rem 1.2rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; }
+    h1 { font-size: 2.2rem; color: #3c435d; margin-bottom: 0.5rem; }
+    .price { font-size: 2.5rem; font-weight: 800; color: #3c435d; margin-bottom: 2rem; }
+    .detail-row { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #eaeaec; }
+    .label { color: #666; font-weight: 500; }
+    .value { color: #333; font-weight: 600; }
+    .size-badge { background: #3c435d; color: white; padding: 0.3rem 1rem; border-radius: 8px; }
+    .low-stock { color: #f59e0b; }
+    .buy-section { margin-top: 2rem; padding: 2rem; background: #eaeaec; border-radius: 20px; }
+    .buy-title { font-size: 1.1rem; color: #3c435d; margin-bottom: 1.5rem; }
+    .btn-mercadopago { width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.8rem; background: linear-gradient(135deg, #009EE3 0%, #007BB8 100%); color: white; padding: 1rem 2rem; border-radius: 12px; border: none; font-size: 1.05rem; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,158,227,0.3); }
+    .btn-mercadopago:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,158,227,0.4); }
+    .btn-mercadopago:disabled { background: #999; cursor: not-allowed; }
+    .spinner-small { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    .divider { display: flex; align-items: center; margin: 1.5rem 0; color: #666; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #d5d5d9; }
+    .divider span { padding: 0 1rem; }
+    .btn-whatsapp { width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.8rem; background: #25D366; color: white; padding: 1rem 2rem; border-radius: 12px; text-decoration: none; font-size: 1.05rem; font-weight: 600; transition: all 0.3s; box-shadow: 0 4px 15px rgba(37,211,102,0.3); }
+    .btn-whatsapp:hover:not(.disabled) { transform: translateY(-2px); background: #128C7E; }
+    .btn-whatsapp.disabled { background: #999; }
+    .buy-note { margin-top: 1.5rem; font-size: 0.85rem; color: #666; text-align: center; line-height: 1.6; }
+    .loading, .not-found { text-align: center; padding: 4rem; }
+    .spinner { width: 50px; height: 50px; border: 4px solid #eaeaec; border-top: 4px solid #3c435d; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @media (max-width: 768px) { .product-detail { grid-template-columns: 1fr; gap: 2rem; } h1 { font-size: 1.8rem; } .price { font-size: 2rem; } }
   `]
 })
 export class ProductDetailComponent implements OnInit {
@@ -407,19 +192,13 @@ export class ProductDetailComponent implements OnInit {
     this.http.post<any>(`${environment.apiUrl}/payments/create-preference`, body)
       .subscribe({
         next: (response) => {
-          // Usar sandbox en desarrollo, initPoint en producción
-          const checkoutUrl = environment.production 
-            ? response.initPoint 
-            : (response.sandboxInitPoint || response.initPoint);
-          
-          console.log('Checkout URL:', checkoutUrl);
-          window.location.href = checkoutUrl;
+          // Redirigir al checkout de MercadoPago
+          window.location.href = response.initPoint;
         },
         error: (error) => {
           console.error('Error creating preference:', error);
           this.loadingPayment = false;
-          const errorMsg = error.error?.message || 'Error al procesar el pago';
-          alert(`${errorMsg}\n\nPor favor, intentá de nuevo o contactanos por WhatsApp.`);
+          alert('Error al procesar el pago. Por favor, intentá de nuevo o contactanos por WhatsApp.');
         }
       });
   }

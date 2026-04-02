@@ -192,8 +192,9 @@ export class ProductDetailComponent implements OnInit {
     this.http.post<any>(`${environment.apiUrl}/payments/create-preference`, body)
       .subscribe({
         next: (response) => {
-          // Redirigir al checkout de MercadoPago
-          window.location.href = response.initPoint;
+          // Usar sandboxInitPoint para testing, initPoint para producción
+          const checkoutUrl = response.sandboxInitPoint || response.initPoint;
+          window.location.href = checkoutUrl;
         },
         error: (error) => {
           console.error('Error creating preference:', error);

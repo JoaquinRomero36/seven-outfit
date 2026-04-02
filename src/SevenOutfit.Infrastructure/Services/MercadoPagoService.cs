@@ -43,8 +43,8 @@ public class MercadoPagoService : IMercadoPagoService
         
         _logger.LogInformation("Creando preferencia MP: {ProductName}, Precio: {Price}", product.Name, price);
         
-        // URL de ngrok para desarrollo (cambiar en producción)
-        var baseUrl = "https://916b-2803-9800-b880-81d9-5805-70a5-ef4a-6973.ngrok-free.app";
+        // URL de la app (usar ngrok para MP en desarrollo, localhost para red local)
+        var baseUrl = _configuration["MercadoPago:BaseUrl"] ?? "http://localhost:4200";
         
         var preference = new
         {
